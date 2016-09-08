@@ -2,6 +2,7 @@ package com.adm.domain;
 
 import java.sql.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,12 +18,12 @@ public class Betaling {
 	@Id
 	@SequenceGenerator(name = "betalingId", sequenceName = "zbetaling_sequence", allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "betalingId")
-	private Long id;
+	private long id;
 
 	@Column(nullable = false)
 	Date betaalDatum;
 
-	@OneToOne(optional = false)
+	@OneToOne(optional = false, cascade = CascadeType.ALL)
 	Betaalwijze betaalwijze;
 
 	@ManyToOne(optional = false)
@@ -31,10 +32,10 @@ public class Betaling {
 	@ManyToOne(optional = false)
 	Factuur factuur;
 
-	@Column(nullable = false)
+	@Column(nullable = true)
 	String betalingsGegevens;
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
@@ -58,7 +59,7 @@ public class Betaling {
 		return betalingsGegevens;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

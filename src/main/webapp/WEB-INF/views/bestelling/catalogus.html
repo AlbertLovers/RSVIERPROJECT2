@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" th:href="@{/resources/style.css}" />
 </head>
 <body>
-	<div id="header" th:include="page :: headerAuthenticated"></div>
+	<div id="header" th:include="template :: headerAuthenticated"></div>
 
 	<div id="content">
 		<h1>Catalogus</h1>
@@ -29,7 +29,7 @@
 					<td>
 					
 					<input type="text" id="*{artikel.aantal}" name="aantal" value = "0" />
-					<input type="hidden" id="*{artikelId}" name="artikelId" th:value = "${artikel.artikel.id}" />
+					<input type="hidden" id="*{artikelId}" name="artikelId" th:value = "${artikel.artikel.artikelId}" />
 					<input type="hidden" id="*{prijsId}" name="prijsId" th:value = "${artikel.prijs.id}" /></td>
 					
 					
@@ -41,7 +41,7 @@
 		</table>
 	</div>
 
-	<div id="footer" th:include="page :: copy"></div>
+	<div id="footer" th:include="template :: footer"></div>
 
 </body>
 </html>

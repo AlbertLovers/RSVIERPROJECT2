@@ -1,81 +1,100 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+
 <head>
-    <title>Harrie and Marie-Claire</title>
-    <link rel="stylesheet"
-          type="text/css"
-          th:href="@{/resources/style.css}" />
+    <title>Harrie &amp; Marie</title>
+
+    <!-- Determine Characterset as UTF8 -->
+    <meta charset="UTF-8" />
+
+    <!--Will control the visible area for the user. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <!-- Google fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Old+Standard+TT:400,400italic' rel="stylesheet" type="text/css" />
+
+    <!-- font awesome -->
+    <link rel="stylesheet" type="text/css" th:href="'//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'" />
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/bootstrap/css/bootstrap.min.css}" />
+
+    <!-- animate.css -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/animate.css}" />
+
+    <!-- Owl Carousel Assets -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/owl-carousel/owl.carousel.css}" />
+
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/style.css}" />
+
+    <!-- favicon -->
+    <link rel="shortcut icon" th:href="@{/resources/images/hmlogo.png}" type="image/x-icon" />
+    <link rel="icon" th:href="@{/resources/images/hmlogo.png}" type="image/x-icon" />
+
 </head>
+
 <body>
-<div id="header" th:include="page :: headerAuthenticated"></div>
+
+<div id="headerAuthenticated" sec:authorize="isAuthenticated()" th:include="template :: headerAuthenticated">AUTH</div>
+<div id="header" sec:authorize="isAnonymous()" th:include="template :: header">NON AUTH</div>
 
 <div id="content">
 
-    <div>
-        <h1 th:text = "#{harrie.products.artikelLijst}">ArtikelLijst</h1>
-        
-        <form th:action="@{/artikel/register}">
-                		<input type = "submit" th:value = "#{harrie.actions.newProduct}"/>
-        </form>
-       
-        <table class="artikelList">
-            <tr>
-                <th align="left">Client</th>
-                <th align="left">Actions</th>
-            </tr>
+    <div class="container">
 
-            <tr class = "artikelList" th:each="artikel : ${artikelList}"
-                th:id="'artikel_' + ${artikel.getId()}">
-                <td class="artikelList">
-                    <div class="artikelNaam"> <span th:text="${artikel.artikelNaam}"></span>
-                        <span class="artikelId" th:text="'(ID: ' + ${artikel.id} + ')'"></span>
-                       
+        <div class="content inside-page collection">
+
+            <div class="pull-right sortby">
+                <select class="form-control">
+                    <option>Order by A to Z</option>
+                    <option>Order by Z to A</option>
+                    <option>Order by Price</option>
+                    <option>Order by Rating</option>
+                </select>
+            </div>
+
+            <h2 class="title" th:text = "#{harrie.products.artikelLijst}">Products</h2>
+
+            <div class="breadcrumb"><a th:href="@{/}">Home</a> / Products</div>
+
+            <form sec:authorize="hasRole('ADMIN')" th:action="@{/artikel/register}">
+                <input type = "submit" th:value = "#{harrie.actions.newProduct}"/>
+            </form>
+
+            <div class="row">
+
+                <div class="col-sm-2 col-xs-6"
+                     th:each="artikel : ${artikelList}"
+                     th:id="'artikel_' + ${artikel.getArtikelId()}">
+
+                    <div class="product">
+                        <a th:href="@{/artikel/select/{id}(id=${artikel.artikelId})}">
+                            <img th:src="@{'data:image/jpeg;base64,'+${artikel.plaatje}}"  class="img-responsive" /></a>
+                        <div class="row title-price">
+                            <div class="col-md-8"><h5><a th:href="@{/artikel/select/{id}(id=${artikel.artikelId})}" th:text="${artikel.artikelNaam}">Warm Cloths</a></h5></div>
+                            <div class="col-md-4">&euro; <span th:text="${#numbers.formatDecimal(artikel.artikelPrijs, 0, 0)}"></span></div>
+                        </div>
+                        <a th:href="@{/artikel/select/{id}(id=${artikel.artikelId})}" class="btn btn-default"><i class="fa fa-shopping-cart"></i> Add to Cart</a>
                     </div>
-                    <div>
-                       	 <table>
-                            <tr><br/></tr>
-                            <tr>
-                                <td><span class="artikelInformation" th:text = "#{harrie.products.naam}">Product Name</span></td>
-                                <td><span class="artikelInformation" th:text="${artikel.artikelNaam}">-</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="artikelInformation" th:text = "#{harrie.products.prijs}">Price:</span></td>
-                                <td>&euro; <span class="artikelInformation" th:text="${#numbers.formatDecimal(artikel.artikelPrijs, 0, 'COMMA', 2, 'POINT')}">-</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="artikelInformation" th:text = "#{harrie.products.levertijd}">Delivery Time:</span></td>
-                                <td><span class="artikelInformation" th:text="${artikel.verwachteLevertijd}">-</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="artikelInformation" th:text = "#{harrie.products.voorraad}">In Stock:</span></td>
-                                <td><span class="artikelInformation" th:text="${artikel.inAssortiment}">-</span></td>
-                            </tr>
-                        </table>
-                    </div>
-                </td>
+                </div>
 
-                <td class = "artikelList">
-                	<form th:action="@{/artikel/select/{id}(id=${artikel.id})}">
-                		<input type = "submit" th:value = "#{harrie.actions.select}"/>
-                	</form>
-                	<form th:action="@{/artikel/wijzigen/{id}(id=${artikel.id})}">
-                        <input type="submit" th:value="#{harrie.actions.modify}"/>
-                    </form>
-                    <form th:action="@{/artikel/verwijderen/{id}(id=${artikel.id})}">
-                            <input type="hidden" name="fromProfile" value="1" />
-                            <input type="submit" th:value="#{harrie.actions.tumble}"/>
-                    </form>
-                </td>
 
-                <td class = "artikelListProductPicture">
-                    <span><img class="productPicture" th:src="@{'data:image/jpeg;base64,'+${artikelList.get(artikel.id - 1).getPlaatje()}}" /></span>
-                </td>
-
-            </tr>
-        </table>
-    </div>
+            </div> 
+        </div> <!-- collections -->
+    </div> <!-- container -->
 </div>
 
-<div id="footer" th:include="page :: copy"></div>
+<div id="footer" th:include="template :: footer"></div>
+
+<script th:src="@{/resources/assets/script.js}"></script>
+<script th:src="@{/resources/assets/respond.js}"></script>
+<script th:src="@{/resources/assets/owl-carousel/owl.carousel.min.js}"></script>
+<script th:src="@{/resources/assets/jquery.js}"></script>
+<script th:src="@{/resources/assets/bootstrap/js/bootstrap.js}"></script>
+
 </body>
 </html>

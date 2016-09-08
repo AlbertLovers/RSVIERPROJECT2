@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +20,7 @@ public class Factuur {
 	@Id
 	@SequenceGenerator(name = "factuurId", sequenceName = "zfactuur_sequence", allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "factuurId")
-	private Long id;
+	private long id;
 	
 	@Column(nullable = false)
 	private String factuurNummer;
@@ -27,7 +28,7 @@ public class Factuur {
 	@Column(nullable = false)
 	private Date factureringsDatum;
 	
-	@OneToMany(mappedBy = "factuur")
+	@OneToMany(mappedBy = "factuur", cascade = CascadeType.ALL)
 	@Column
 	private Set<Betaling> betalingSet = new LinkedHashSet<Betaling>();
 	
@@ -43,7 +44,7 @@ public class Factuur {
 			betalingSet.remove(betaling);
 	}
 	
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
@@ -63,7 +64,7 @@ public class Factuur {
 		return bestelling;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

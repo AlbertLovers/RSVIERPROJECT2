@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Betaalwijze {
 
+	@Transient
 	private final String[] type = {"harrie.betaling.creditcard",
 			"harrie.betaling.cash",
 			"harrie.betaling.ideal",
@@ -24,11 +26,14 @@ public class Betaalwijze {
 	@Id
 	@SequenceGenerator(name = "betaalwijzeId", sequenceName = "zbetaalwijze_sequence", allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "betaalwijzeId")
-	private Long id;
+	private long id;
 
 	@Column
 	private String betaalWijze;
 
+	@Transient 
+	String value;
+	
 	public String getBetaalWijze() {
 		return betaalWijze;
 	}
@@ -41,21 +46,25 @@ public class Betaalwijze {
 		return type;
 	}
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
 	public String getValue() {
-		return betaalWijze;
+		return value;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
-	public void setValue(int value) {
-		this.betaalWijze = type[value];
+	public void setValue(String value) {
+		this.value = value;
+		setBetaalWijzeType();
 	}
 
+	public void setBetaalWijzeType(){
+		betaalWijze = type[Integer.parseInt(value)];
+	}
 
 }

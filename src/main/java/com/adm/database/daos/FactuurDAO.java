@@ -14,6 +14,11 @@ public class FactuurDAO extends GenericDAOImpl<Factuur, Long>	{
 	 * Methodes kunnen toegevoegd of overschreven worden voor verdere implementatie.
 	 */
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6398159887518006767L;
+
 	// Constructor geeft automatisch de entityClass (Factuur.class) door aan GenericDAOImpl
 	protected FactuurDAO() {
 		super(Factuur.class);

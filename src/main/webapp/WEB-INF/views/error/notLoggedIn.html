@@ -1,0 +1,84 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+
+<head>
+    <title>Harrie &amp; Marie</title>
+
+    <!-- Determine Characterset as UTF8 -->
+    <meta charset="UTF-8" />
+
+    <!--Will control the visible area for the user. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <!-- Google fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Old+Standard+TT:400,400italic' rel="stylesheet" type="text/css" />
+
+    <!-- font awesome -->
+    <link rel="stylesheet" type="text/css" th:href="'//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'" />
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/bootstrap/css/bootstrap.min.css}" />
+
+    <!-- animate.css -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/animate.css}" />
+
+    <!-- Owl Carousel Assets -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/owl-carousel/owl.carousel.css}" />
+
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/style.css}" />
+
+    <!-- favicon -->
+    <link rel="shortcut icon" th:href="@{/resources/images/hmlogo.png}" type="image/x-icon" />
+    <link rel="icon" th:href="@{/resources/images/hmlogo.png}" type="image/x-icon" />
+
+</head>
+
+<body id="home">
+
+<div id="header" th:include="template :: header"></div>
+
+<div id="content">
+
+    <div class="container">
+        <!-- form -->
+        <div class="content inside-page about">
+
+            <h2 class="title">About</h2>
+            <div class="breadcrumb"><a th:href="@{/}">Home</a> / About</div>
+
+            <div class="row">
+                <div class="col-sm-4">
+
+                    <h3 th:text = "#{harrie.error.header}"></h3>
+
+                    <p>
+                    <span class = "errorMessage" th:text = "#{harrie.error.message.notLoggedIn}"></span>
+                    </p>
+
+                </div>
+                <div class="col-sm-8">
+                    <h3>About us</h3>
+                    <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p>
+                    <p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</p>
+                    <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. </p>
+                </div>
+            </div>
+
+        </div> <!-- Inside Content -->
+    </div> <!-- Container -->
+
+</div>
+
+<div id="footer" th:include="template :: footer"></div>
+
+<script th:src="@{/resources/assets/script.js}"></script>
+<script th:src="@{/resources/assets/respond.js}"></script>
+<script th:src="@{/resources/assets/owl-carousel/owl.carousel.min.js}"></script>
+<script th:src="@{/resources/assets/jquery.js}"></script>
+<script th:src="@{/resources/assets/bootstrap/js/bootstrap.js}"></script>
+
+</body>
+</html>

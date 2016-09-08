@@ -15,7 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
 @Entity
-public class Bestelling implements Serializable{
+public class Bestelling implements Serializable {
 
 	/**
 	 * 
@@ -25,7 +25,7 @@ public class Bestelling implements Serializable{
 	@Id
 	@SequenceGenerator(name = "bestellingId", sequenceName = "zBestelling_sequence", allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "bestellingId")
-	private Long id;
+	private long id;
 
 	@Column(nullable = false)
 	private String bestelNummer;
@@ -52,7 +52,7 @@ public class Bestelling implements Serializable{
 		bestelArtikelSet = new HashSet<BestelArtikel>();
 	}
 
-	public Bestelling(Long id, Klant klant, Set<BestelArtikel> bestelArtikelSet, String datumAanmaak){
+	public Bestelling(long id, Klant klant, Set<BestelArtikel> bestelArtikelSet, String datumAanmaak){
 		this.id = id;
 		this.klant = klant;
 		this.bestelArtikelSet = bestelArtikelSet;
@@ -60,7 +60,7 @@ public class Bestelling implements Serializable{
 		bestellingActief = true;
 	}
 
-	public Bestelling(Long id, Klant klant, Set<BestelArtikel> bestelArtikelSet){
+	public Bestelling(long id, Klant klant, Set<BestelArtikel> bestelArtikelSet){
 		this.id = id;
 		this.klant = klant;
 		this.bestelArtikelSet = bestelArtikelSet;
@@ -68,7 +68,7 @@ public class Bestelling implements Serializable{
 	}
 
 	
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
@@ -100,7 +100,7 @@ public class Bestelling implements Serializable{
 		this.factuurSet = factuurSet;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

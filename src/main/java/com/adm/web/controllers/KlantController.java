@@ -4,6 +4,7 @@ import com.adm.database.daos.KlantDAO;
 import com.adm.database.service.KlantService;
 import com.adm.domain.Adres;
 import com.adm.domain.AdresType;
+import com.adm.domain.BestelArtikel;
 import com.adm.domain.Klant;
 import com.adm.web.forms.KlantRegisterForm;
 import com.sun.org.apache.xml.internal.security.utils.Base64;
@@ -12,6 +13,7 @@ import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,18 +42,19 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 //TODO ClientController -> Exception handling in general
 
+@SuppressWarnings("restriction")
 @Controller
 @Component
 @RequestMapping("/klant")
 @Transactional
-@SessionAttributes({ "klant", "plaatje"})
+@SessionAttributes({ "klant", "plaatje", "shoppingCart"})
 public class KlantController {
 
     private KlantDAO klantDAO;
     private MessageSource messageSource;
 
-    //    private String pictureFolder = "C:/harrie/uploads/data/profilePictures"; // Windows
-    private String pictureFolder = "/tmp/harrie/uploads/data/profilePictures/"; // Unix-Based
+        private static String pictureFolder = "C:/harrie/uploads/data/profilePictures/"; // Windows
+//    private String pictureFolder = "/tmp/harrie/uploads/data/profilePictures/"; // Unix-Based
 
     @Autowired
     public KlantController(KlantService klantService, MessageSource messageSource) {
@@ -90,13 +93,23 @@ public class KlantController {
         // Save profilePicture to a file
         saveProfilePicture(nieuweKlant.getId(), klantRegisterForm.getProfilePicture());
 
+        // Add client to model
+//        model.addAttribute("klant", nieuweKlant);
+
         // Return to client list
-        return showClients(model);
+//        return showProfile(model, nieuweKlant);
+        return "redirect:/login";
     }
 
     /** CLIENT PROFILE PAGE **/
     @RequestMapping(value = "/profile", method = GET)
     public String showProfile(Model model, Klant klant) throws Exception {
+
+    	
+        // Find client and set the profilePicture TODO: Prob wat dubbel her en der, streamlinen
+        klant = klantDAO.findById(klant.getId());
+        klant.setClientProfilePicture(getProfilePicture(klant.getId()));
+        model.addAttribute(klant);
 
         // If there no active client yet, return to clientList
         if (klant.getEmail() == null) {
@@ -124,6 +137,7 @@ public class KlantController {
 
     /** CLIENT LIST METHOD **/
     @RequestMapping(value = "/klanten", method = GET)
+    @Secured({"ROLE_ADMIN"})
     public String showClients(Model model) throws Exception {
         List<Klant> klantenLijst = klantDAO.findAll();
 
@@ -144,7 +158,8 @@ public class KlantController {
 
     /** TUMBLE CLIENT STATUS METHOD **/
     @RequestMapping(value = "/tumble/{id}", method = GET)
-    public String tumbleStatusClient(@PathVariable Long id,
+    @Secured({"ROLE_ADMIN"})
+    public String tumbleStatusClient(@PathVariable long id,
                                      Model model,
                                      @RequestParam(value="fromProfile", defaultValue="0") int fromProfilePage
                                     ) throws Exception {
@@ -165,6 +180,8 @@ public class KlantController {
 
         // If the direct is from the profile page, redirect to the profilepage instead of the client list.
         if (fromProfilePage == 1) {
+            klant.setClientProfilePicture(getProfilePicture(klant.getId()));
+            model.addAttribute(klant);
             return showProfile(model, klant);
         }
 
@@ -174,7 +191,8 @@ public class KlantController {
 
     /** SELECT CLIENT METHOD **/
     @RequestMapping(value = "/select/{id}", method = GET)
-    public String selectClient(@PathVariable Long id, Model model) throws Exception {
+    @Secured({"ROLE_ADMIN"})
+    public String selectClient(@PathVariable long id, Model model) throws Exception {
         // Find the persisting client
         Klant klant = klantDAO.findById(id);
 
@@ -191,7 +209,7 @@ public class KlantController {
 
     /** MODIFY CLIENT (GET) METHOD **/
     @RequestMapping(value = "/modify/{id}", method = GET)
-    public String modifyClient(@PathVariable Long id, Model model) throws Exception {
+    public String modifyClient(@PathVariable long id, Model model) throws Exception {
         // Find client by ID
         Klant klant = klantDAO.findById(id);
         klant.setClientProfilePicture(getProfilePicture(klant.getId()));
@@ -217,8 +235,10 @@ public class KlantController {
     public String processModification(
             @Valid KlantRegisterForm klantRegisterForm,
             Errors errors,
+            HashSet<BestelArtikel> winkelwagen,
             Klant klant,
-            Model model)
+            Model model,
+            int fromProfileView)
             throws Exception {
 
         // If there are errors in the input, redirect to the modify page
@@ -243,13 +263,19 @@ public class KlantController {
         Hibernate.initialize(klant.getAdresGegevens());
         model.addAttribute(klant);
 
-        // Redirect to the client list
+        // Redirect to the client list or profile view
+        if (fromProfileView == 1) {
+            klant.setClientProfilePicture(getProfilePicture(klant.getId()));
+            model.addAttribute(klant);
+            return showProfile(model, klant);
+        }
+
         return showClients(model);
     }
 
     /** METHOD FOR GETTING PROFILE PICTURE FROM SERVER **/
     private static String getProfilePicture(long id) throws Exception {
-        byte[] profilePictureArray = Files.readAllBytes(new File("/tmp/harrie/uploads/data/profilePictures/"
+        byte[] profilePictureArray = Files.readAllBytes(new File(pictureFolder
                 + id + ".jpg").toPath());
 
         String profileString = Base64.encode(profilePictureArray);

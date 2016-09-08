@@ -1,166 +1,305 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+
+
 <head>
-    <title>Harrie and Marie-Claire</title>
-    <link rel="stylesheet"
-          type="text/css"
-          th:href="@{/resources/style.css}" />
-</head>
+    <title>Harrie &amp; Marie</title>
+
+    <!-- Determine Characterset as UTF8 -->
+    <meta charset="UTF-8" />
+
+    <!--Will control the visible area for the user. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <!-- Google fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Old+Standard+TT:400,400italic' rel="stylesheet" type="text/css" />
+
+    <!-- font awesome -->
+    <link rel="stylesheet" type="text/css" th:href="'//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'" />
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/bootstrap/css/bootstrap.min.css}" />
+
+    <!-- animate.css -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/animate.css}" />
+
+    <!-- Owl Carousel Assets -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/owl-carousel/owl.carousel.css}" />
+
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/style.css}" />
+
+    <!-- favicon -->
+    <link rel="shortcut icon" th:href="@{/resources/images/hmlogo.png}" type="image/x-icon" />
+    <link rel="icon" th:href="@{/resources/images/hmlogo.png}" type="image/x-icon" />
+
+</head> <!-- HEADER -->
+
 <body>
-<div id="header" th:include="page :: headerAuthenticated"></div>
+
+
+<div id="headerAuthenticated" sec:authorize="isAuthenticated()" th:include="template :: headerAuthenticated">AUTH</div>
+<div id="header" sec:authorize="isAnonymous()" th:include="template :: header">NON AUTH</div>
 
 <div id="content">
-    <div id="currentProfile" class="currentProfile">
-        <h1 th:text="#{harrie.profile.profile}"></h1>
 
-        <table class="klantList">
-            <tr>
-                <th align="left" th:text="#{harrie.klant.client}">Client</th>
-                <th align="left" th:text="#{harrie.klant.clientactions}">Client Actions</th>
-                <th align="left" th:text="#{harrie.klant.profilePicture}">Profile Picture</th>
-            </tr>
+    <div class="container">
 
-            <tr class = "klantList">
-                <td class="klantList">
-                    <div class="klantAdresHeader"> <span th:text="${klant.email}"></span>
-                        <span class="klantId" th:text="'(ID: ' + ${klant.id} + ')'"></span>
-                        <table>
-                            <tr>
-                                <td><span class="klantInformationItem" th:text="#{harrie.klant.password}">Password:</span></td>
-                                <td><span class="klantInformation" th:text="${klant.password}">-</span></td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div>
-                        <table>
-                            <tr><br/></tr>
-                            <tr>
-                                <td><span class="klantInformationItem" th:text="#{harrie.klant.firstName}">First Name:</span></td>
-                                <td><span class="klantInformation" th:text="${klant.voornaam}">-</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="klantInformationItem" th:text="#{harrie.klant.prefix}">Prefix:</span></td>
-                                <td><span class="klantInformation" th:text="${klant.tussenvoegsel}">-</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="klantInformationItem" th:text="#{harrie.klant.lastName}">Last Name</span></td>
-                                <td><span class="klantInformation" th:text="${klant.achternaam}">-</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="klantInformationItem" th:text="#{harrie.klant.dateCreated}">Date Created</span></td>
-                                <td><span class="klantInformation" th:text="${klant.datumAanmaak}">-</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="klantInformationItem" th:text="#{harrie.klant.dateModified}">Date Modified</span></td>
-                                <td><span class="klantInformation" th:text="${klant.datumGewijzigd}">-</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="klantInformationItem" th:text="#{harrie.klant.active}">Active</span></td>
-                                <td><span class="klantInformation" th:text="${klant.klantActief}">-</span></td>
-                            </tr>
-                        </table>
-                    </div>
-                </td>
+        <div class="content inside-page client-details">
+            <div class="breadcrumb"><a th:href="@{/}">Home</a> / <a th:href="@{/klant/profile}">My Profile</a> / <span th:text="${klant.email}"></span></div>
 
-                <td class = "klantList">
-                    <form th:action="@{/klant/modify/{id}(id=${klant.id})}">
-                        <input type="submit" th:value="#{harrie.actions.modify}"/>
-                    </form>
-                    <form th:action="@{/klant/tumble/{id}(id=${klant.id})}">
-                            <input type="hidden" name="fromProfile" value="1" />
-                            <input type="submit" th:value="#{harrie.actions.tumble}"/>
-                    </form>
-                </td>
+            <div class="row">
+                <div class="col-sm-9">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <!-- product carousel -->
+                            <div id="ProductCarousel" class="carousel slide" data-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="item active"><img th:src="@{'data:image/jpeg;base64,'+${klant.clientProfilePicture}}" class="img-responsive" alt="profilePicture" /></div>
+                                </div>
+                                <!-- Controls -->
+                                <a class="left carousel-control" href="#ProductCarousel" role="button" data-slide="prev"><i class="fa fa-angle-left"></i></a>
+                                <a class="right carousel-control" href="#ProductCarousel" role="button" data-slide="next"><i class="fa fa-angle-right"></i></a>
+                            </div>
+                            <!-- product carousel -->
+                        </div>
 
-                <td class = "klantListProfilePicture">
-                    <span><img class="profilePicture" th:src="@{'data:image/jpeg;base64,'+${klant.clientProfilePicture}}" /></span>
-                </td>
+                        <!-- product information -->
+                        <div class="col-sm-7 information">
+                            <h1 th:text="${klant.email}"></h1>
+                            <h2 th:text="${klant.voornaam} + ' ' + ${klant.achternaam}"></h2>
 
-            </tr>
-        </table>
+                            <div class="clearfix spacer">
+                                <div class="col-sm-6">
+                                    <fieldset>
+                                        <div class="form-horizontal content-center">
 
-        <br/><br/><br/>
+                                            <form th:object="${klant}">
 
-        <table class="adresList">
-            <tr>
+                                                <div class="form-group">
+                                                    <label th:class="'col-sm-4 control-label'"
+                                                           th:text="#{harrie.klant.emailAccount}"></label>
 
-                <th align="left" >
-                    <span th:text="#{harrie.adres.address}">Address</span>
-                    <span><a th:href="@{/klant/adres/register}" th:text="'(' + #{harrie.adres.register} + ')'">Register address</a></span>
-                </th>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" th:field="*{email}"
+                                                               th:class="'form-control'"
+                                                               th:readonly="true" />
+                                                    </div>
+                                                </div>
 
-                <th align="left" th:text="#{harrie.adres.addressActions}">Address Actions</th>
+                                                <div class="form-group">
+                                                    <label th:class="'col-sm-4 control-label'"
+                                                           th:text="#{harrie.klant.firstName}"></label>
 
-                <th align="left" th:text="#{harrie.adres.googleMaps}">Google Maps</th>
-            </tr>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" th:field="*{voornaam}"
+                                                               th:class="'form-control'"
+                                                               th:readonly="true" />
+                                                    </div>
+                                                </div>
 
-            <tr class = "adresList" th:each="adres : ${adresMap}"
-                th:id="'adres' + ${adres.key.id}">
-                <td class="adresList">
-                    <div class="klantAdresHeader"> <span th:text="${adres.key.getStraatnaam()} + ' ' + ${adres.key.getHuisnummer()}"></span>
-                        <span class="adresId" th:text="'(ID: ' + ${adres.key.id} + ')'"></span>
-                        <span class="klantInformation" th:text="'(ID(ADRES)): ' + ${adres.value.id} + ')'">Value ID</span>
-                        <table>
-                            <tr>
-                                <td><span class="klantInformationItem" th:text="#{harrie.adres.adresType}">Adres Type:</span></td>
-                                <td><span class="klantInformation" th:text="${adres.key.adresTypeString}">Key Type</span></td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div>
-                        <table>
-                            <tr><br/></tr>
-                            <tr>
-                                <td><span class="klantInformationItem" th:text="#{harrie.adres.street}">Straatnaam:</span></td>
-                                <td><span class="klantInformation" th:text="${adres.key.straatnaam}">-</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="klantInformationItem" th:text="#{harrie.adres.number}">Huisnummer:</span></td>
-                                <td><span class="klantInformation" th:text="${adres.key.huisnummer}">-</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="klantInformationItem" th:text="#{harrie.adres.prefix}">Toevoeging</span></td>
-                                <td><span class="klantInformation" th:text="${adres.key.toevoeging}">-</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="klantInformationItem" th:text="#{harrie.adres.zipcode}">Postcode</span></td>
-                                <td><span class="klantInformation" th:text="${adres.key.postcode}">-</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="klantInformationItem" th:text="#{harrie.adres.dateCreated}">Date Created</span></td>
-                                <td><span class="klantInformation" th:text="${adres.key.datumAanmaak}">-</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="klantInformationItem" th:text="#{harrie.adres.dateModified}">Date Modified</span></td>
-                                <td><span class="klantInformation" th:text="${adres.key.datumGewijzigd}">-</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="klantInformationItem" th:text="#{harrie.adres.active}">Active</span></td>
-                                <td><span class="klantInformation" th:text="${adres.key.adresActief}">-</span></td>
-                            </tr>
-                        </table>
-                    </div>
-                </td>
+                                                <div class="form-group">
+                                                    <label th:class="'col-sm-4 control-label'"
+                                                           th:text="#{harrie.klant.prefix}"></label>
 
-                <td class = "adresList">
-                    <span><a th:href="@{/klant/adres/modify/{id}(id=${adres.key.id})}" th:text="#{harrie.actions.modify}">Modify</a></span><br />
-                    <span><a th:href="@{/klant/adres/tumble/{id}(id=${adres.key.id})}" th:text="#{harrie.actions.tumble}">Tumble Status</a></span><br />
-                </td>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" th:field="*{tussenvoegsel}"
+                                                               th:class="'form-control'"
+                                                               th:readonly="true" />
+                                                    </div>
+                                                </div>
 
-                <td class = "adresList">
-                    <span class = "klantInformation" th:text="#{harrie.adres.googleMaps}"></span>
-                </td>
+                                                <div class="form-group">
+                                                    <label th:class="'col-sm-4 control-label'"
+                                                           th:text="#{harrie.klant.lastName}"></label>
 
-            </tr>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" th:field="*{achternaam}"
+                                                               th:class="'form-control'"
+                                                               th:readonly="true" />
+                                                    </div>
+                                                </div>
 
-        </table>
-    </div>
+                                                <div sec:authorize="hasRole('ADMIN')" class="form-group">
+                                                    <label th:class="'col-sm-4 control-label'"
+                                                           th:text="#{harrie.klant.active}"></label>
+
+                                                    <div class="col-sm-8">
+                                                        <input type="text" th:field="*{klantActief}"
+                                                               th:class="'form-control'"
+                                                               th:readonly="true" />
+                                                    </div>
+                                                </div>
+
+                                            </form>
+
+                                            <!-- USER -->
+                                            <div sec:authorize="hasRole('USER')" class="col-sm-8 col-sm-offset-4">
+                                                <form th:action="@{/klant/modify/{id}(id=${klant.id})}">
+                                                    <input type="submit" th:value="#{harrie.actions.modify}" class="btn btn-primary"/>
+                                                </form>
+                                            </div>
+
+                                            <!-- ADMIN -->
+                                            <div sec:authorize="hasRole('ADMIN')" class="col-sm-6 ">
+                                                <form th:action="@{/klant/modify/{id}(id=${klant.id})}">
+                                                    <input type="submit" th:value="#{harrie.actions.modify}" class="btn btn-primary"/>
+                                                </form>
+                                            </div>
+
+                                            <div sec:authorize="hasRole('ADMIN')" class="col-sm-6 ">
+                                                <form th:action="@{/klant/tumble/{id}(id=${klant.id})}">
+                                                    <input type="submit" th:value="#{harrie.actions.tumble}" class="btn btn-primary"/>
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+
+                                </div> <!-- end col-sm-6 -->
+
+                            </div> <!-- end clearfix spacer -->
+
+                            <div class="description-tabs">
+                                <!-- Nav tabs -->
+
+                                <ul class="nav nav-tabs" role="tablist">
+
+                                    <li class="active"><a href="#description" role="tab" data-toggle="tab">Addresses</a></li>
+                                    <li th:each="adres : ${adresMap}"
+                                        th:id="'adres' + ${adres.key.id}">
+
+                                        <a sec:authorize="hasRole('USER')" th:if="${adres.key.adresActief == '1'}" th:href="'#address' + ${adres.key.id}" role="tab" data-toggle="tab" th:text="${adres.key.adresTypeString}"> </a>
+                                        <a sec:authorize="hasRole('ADMIN')" th:href="'#address' + ${adres.key.id}" role="tab" data-toggle="tab" th:text="${adres.key.adresTypeString}"> </a>
+                                    </li>
+                                </ul>
+
+                                <!-- Tab panes -->
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="description">
+                                        <div class="vol-sm-12">
+                                        In the following tab's you can find your registered addresses.
+
+                                        In there is the possibility to modify your address. You can have multiple addresses and
+                                        multiple types of addresses.
+                                        </div>
+
+                                        <hr />
+
+                                        <div class= "col-sm-6">
+                                            <a th:href="@{/klant/adres/register}"
+                                               th:text="#{harrie.adres.register}" class="btn btn-primary"> Register</a>
+                                        </div>
+
+                                        <div class ="col-sm-6">
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="tab-pane"
+                                         th:each="adres : ${adresMap}"
+                                         th:id="'address' + ${adres.key.id}">
+
+                                        <div class="reviews">
+                                            <div class = "row">
+                                                <fieldset>
+                                                    <div class="form-group">
+                                                        <label th:class="'col-sm-4 control-label'"
+                                                               th:text="#{harrie.adres.street}"></label>
+                                                        <label th:class="'address col-sm-8'"
+                                                               th:text="${adres.key.straatnaam}"></label>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label th:class="'col-sm-4 control-label'"
+                                                               th:text="#{harrie.adres.number}"></label>
+                                                        <label th:class="'address col-sm-8'"
+                                                               th:text="${adres.key.huisnummer}"></label>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label th:class="'col-sm-4 control-label'"
+                                                               th:text="#{harrie.adres.zipcode}"></label>
+                                                        <label th:class="'address col-sm-8'"
+                                                               th:text="${adres.key.postcode}"></label>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label th:class="'col-sm-4 control-label'"
+                                                               th:text="#{harrie.adres.prefix}"></label>
+                                                        <!-- conditional field because of layout -->
+                                                        <label th:class="'address col-sm-8'"
+                                                               th:if="${adres.key.toevoeging} == ''" th:text="'-'"></label>
+                                                        <label th:class="'address col-sm-8'"
+                                                               th:if="${adres.key.toevoeging} != ''" th:text="${adres.key.toevoeging}"></label>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label th:class="'col-sm-4 control-label'"
+                                                               th:text="#{harrie.adres.city}"></label>
+                                                        <label th:class="'address col-sm-8'"
+                                                               th:text="${adres.key.woonplaats}"></label>
+                                                    </div>
+
+                                                    <div sec:authorize="hasRole('ADMIN')" class="form-group">
+                                                        <label th:class="'col-sm-4 control-label'"
+                                                               th:text="#{harrie.adres.active}"></label>
+                                                        <label th:class="'address col-sm-8'"
+                                                               th:text="${adres.key.adresActief}"></label>
+                                                    </div>
+
+                                                    <hr />
+
+                                                    <!-- IF USER -->
+                                                    <div sec:authorize="hasRole('USER')" class ="col-sm-4">
+
+                                                    </div>
+                                                    <div sec:authorize="hasRole('USER')" class= "col-sm-6">
+                                                        <a th:href="@{/klant/adres/modify/{id}(id=${adres.key.id})}"
+                                                           th:text="#{harrie.actions.modify}" class="btn btn-primary"> Modify</a>
+                                                    </div>
+
+                                                    <!-- IF ADMIN -->
+                                                    <div sec:authorize="hasRole('ADMIN')" class ="col-sm-4">
+                                                        <a th:href="@{/klant/adres/modify/{id}(id=${adres.key.id})}"
+                                                           th:text="#{harrie.actions.modify}" class="btn btn-primary"> Modify</a>
+                                                    </div>
+                                                    <div sec:authorize="hasRole('ADMIN')" class= "col-sm-8">
+                                                        <a th:href="@{/klant/adres/tumble/{id}(id=${adres.key.id})}"
+                                                           th:text="#{harrie.actions.tumble}" class="btn btn-primary"> Tumble</a>
+                                                    </div>
+
+                                                </fieldset>
+                                            </div> <!-- row -->
+                                        </div> <!-- 'reviews' -->
+                                    </div> <!-- tab-pane -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- product information -->
+
+                    </div> <!-- row -->
+                </div> <!-- col-sm-9 -->
+            </div> <!-- row -->
 
 
-    <br/>
+        </div> <!-- INSIDE CLIENT -->
+    </div> <!-- CONTAINER -->
+</div> <!-- CONTENT -->
 
-</div>
+<script th:src="@{/resources/assets/script.js}"></script>
+<script th:src="@{/resources/assets/respond.js}"></script>
+<script th:src="@{/resources/assets/owl-carousel/owl.carousel.min.js}"></script>
+<script th:src="@{/resources/assets/jquery.js}"></script>
+<script th:src="@{/resources/assets/bootstrap/js/bootstrap.js}"></script>
 
-<div id="footer" th:include="page :: copy"></div>
+
+
+<div id="footer" th:include="template :: footer"></div>
+
 </body>
 </html>

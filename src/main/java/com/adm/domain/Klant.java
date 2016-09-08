@@ -18,10 +18,15 @@ import javax.persistence.*;
 		proxyMode = ScopedProxyMode.INTERFACES)
 public class Klant implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5862068961652802422L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "klantId")
 	@SequenceGenerator(name = "klantId", sequenceName = "zKlant_sequence", allocationSize = 1)
-	private Long id;
+	private long id;
 
 	@Column(nullable = false)
 	private String voornaam;
@@ -47,6 +52,9 @@ public class Klant implements Serializable {
 	@Column(nullable = false)
 	private String klantActief;
 
+	@Column(nullable = false)
+	private String klantRol = "ROLE_USER";
+
 	@ManyToMany(cascade = CascadeType.PERSIST)
 	@JoinTable(name = "klantAdresAdresType",
 		joinColumns = @JoinColumn(name = "klantId", nullable = false),
@@ -66,7 +74,7 @@ public class Klant implements Serializable {
 	}
 
 	// Standaard public constructor met basis parameters
-	public Klant(Long id,
+	public Klant(long id,
 			String voornaam,
 			String achternaam,
 			String tussenvoegsel,
@@ -88,9 +96,10 @@ public class Klant implements Serializable {
         this.password = password;
 	}
 
+
 	// Constructor voor alle variabelen, wordt over het algemeen gebruikt tijdens testwerkzaamheden
 	// en bij het opvragen van gegevens via de DAO's
-	public Klant(Long id,
+	public Klant(long id,
 			String voornaam,
 			String achternaam,
 			String tussenvoegsel,
@@ -117,12 +126,39 @@ public class Klant implements Serializable {
 		this.klantActief = klantActief;
 		this.bestellingen = bestellingGegevens;
 	}
+	
+	public Klant(
+			String voornaam,
+			String achternaam,
+			String tussenvoegsel,
+			String email,
+                 String password,
+			String datumAanmaak,
+			String datumGewijzigd,
+			String klantActief,
+			Map<Adres, AdresType> adresGegevens,
+			Set<Bestelling> bestellingGegevens) {
+
+		if (adresGegevens != null){
+			this.adresGegevens = adresGegevens;
+		}
+
+		this.voornaam = voornaam;
+		this.achternaam = achternaam;
+		this.tussenvoegsel = tussenvoegsel;
+		this.email = email;
+        this.password = password;
+		this.datumAanmaak = datumAanmaak;
+		this.datumGewijzigd = datumGewijzigd;
+		this.klantActief = klantActief;
+		this.bestellingen = bestellingGegevens;
+	}
 
 	// Getters & setters
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 		this.datumGewijzigd = new Date(System.currentTimeMillis()).toString();
 
@@ -186,6 +222,12 @@ public class Klant implements Serializable {
 	}
 	public void setClientProfilePicture(String clientProfilePicture) {
 		this.clientProfilePicture = clientProfilePicture;
+	}
+	public String getKlantRol() {
+		return klantRol;
+	}
+	public void setKlantRol(String klantRol) {
+		this.klantRol = klantRol;
 	}
 
 	public Set<Bestelling> getBestellingen() {

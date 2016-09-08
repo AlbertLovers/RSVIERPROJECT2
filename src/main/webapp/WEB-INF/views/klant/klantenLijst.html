@@ -1,19 +1,88 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+
 <head>
-    <title>Harrie and Marie-Claire</title>
-    <link rel="stylesheet"
-          type="text/css"
-          th:href="@{/resources/style.css}" />
+	<title>Harrie &amp; Marie</title>
+
+	<!-- Determine Characterset as UTF8 -->
+	<meta charset="UTF-8" />
+
+	<!--Will control the visible area for the user. -->
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+	<!-- Google fonts -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700'
+		  rel='stylesheet' type='text/css' />
+	<link
+			href='https://fonts.googleapis.com/css?family=Old+Standard+TT:400,400italic'
+			rel="stylesheet" type="text/css" />
+
+	<!-- font awesome -->
+	<link rel="stylesheet" type="text/css"
+		  th:href="'//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'" />
+
+	<!-- bootstrap -->
+	<link rel="stylesheet" type="text/css"
+		  th:href="@{/resources/assets/bootstrap/css/bootstrap.min.css}" />
+
+	<!-- animate.css -->
+	<link rel="stylesheet" type="text/css"
+		  th:href="@{/resources/assets/animate.css}" />
+
+	<!-- Owl Carousel Assets -->
+	<link rel="stylesheet" type="text/css"
+		  th:href="@{/resources/assets/owl-carousel/owl.carousel.css}" />
+
+	<!-- Custom Stylesheet -->
+	<link rel="stylesheet" type="text/css"
+		  th:href="@{/resources/assets/style.css}" />
+
+	<!-- favicon -->
+	<link rel="shortcut icon" th:href="@{/resources/images/hmlogo.png}"
+		  type="image/x-icon" />
+	<link rel="icon" th:href="@{/resources/images/hmlogo.png}"
+		  type="image/x-icon" />
+
 </head>
+
 <body>
-<div id="header" th:include="page :: headerAuthenticated"></div>
+
+<div id="headerAuthenticated" sec:authorize="isAuthenticated()"
+	 th:include="template :: headerAuthenticated">AUTH</div>
+<div id="header" sec:authorize="isAnonymous()"
+	 th:include="template :: header">NON AUTH</div>
 
 <div id="content">
 
-    <div>
-        <h1 th:text="#{harrie.klant.clientList}">Klantenlijst</h1>
-        <table class="klantList">
+	<div class="container">
+
+		<div class="content inside-page collection">
+
+			<h2 class="title" th:text = "#{harrie.klant.clientList}">Klantenlijst</h2>
+
+			<div class="breadcrumb"><a th:href="@{/}">Home</a> / Klantenlijst</div>
+
+			<div class="row">
+
+				<div class="col-sm-2 col-xs-6" th:each="klant : ${klantenList}"
+					 th:id="'klant_' + ${klant.getId()}">
+
+					<div class="product">
+						<a th:href="@{/klant/select/{id}(id=${klant.id})}"> <img
+								th:src="@{'data:image/jpeg;base64,'+${plaatjesList.get((klant.id - 1))}}"
+								class="img-responsive" /></a>
+						<div class="col-md-8">
+							<h5>
+								<a th:href="@{/klant/select/{id}(id=${klant.id})}"
+								   th:text="${klant.id + ': ' + klant.voornaam + ' ' + klant.achternaam}">Warm Cloths</a>
+							</h5>
+						</div>
+					</div>
+				</div>
+
+				<!--         <table class="klantList">
             <tr>
                 <th align="left" th:text="#{harrie.klant.client}">Client</th>
                 <th align="left" th:text="#{harrie.klant.clientactions}">Actions</th>
@@ -21,9 +90,7 @@
             </tr>
 
             <tr class = "klantList" th:each="klant : ${klantenList}"
-                th:id="'spittle_' + ${klant.getId()}">
-
-                <!--TODO WAT DOET SPITTLE HIER NOG TUSSEN? WEG?-->
+                th:id="'klant_' + ${klant.getId()}">
 
                 <td class="klantList">
                     <div class="klantAdresHeader"> <span th:text="${klant.email}"></span>
@@ -78,10 +145,20 @@
 
             </tr>
         </table>
-    </div>
-
+         -->
+			</div>
+		</div> <!-- inside page -->
+	</div> <!-- container -->
 </div>
 
-<div id="footer" th:include="page :: copy"></div>
+<script th:src="@{/resources/assets/script.js}"></script>
+<script th:src="@{/resources/assets/respond.js}"></script>
+<script th:src="@{/resources/assets/owl-carousel/owl.carousel.min.js}"></script>
+<script th:src="@{/resources/assets/jquery.js}"></script>
+<script th:src="@{/resources/assets/bootstrap/js/bootstrap.js}"></script>
+
+<div id="footer" th:include="template :: footer"></div>
+
+
 </body>
 </html>

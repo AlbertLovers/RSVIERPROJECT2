@@ -11,12 +11,17 @@ import java.io.Serializable;
 @Component
 public class AdresType implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4811340707485123892L;
+
 	public AdresType() {}
 
 	@Id
 	@SequenceGenerator(name = "adresTypeId", sequenceName = "zadresType_sequence", allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "adresTypeId")
-	private Long id;
+	private long id;
 
 	@Column
 	private String adres_type;
@@ -24,10 +29,10 @@ public class AdresType implements Serializable {
 	private static final String[] type = {"harrie.adres.homeAddress", "harrie.adres.workAddress", "harrie.adres.deliveryAddress"};
 
 	// Getters and setters
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getAdres_type() {

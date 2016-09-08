@@ -1,81 +1,186 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+
+
 <head>
-    <title>Harrie and Marie-Claire</title>
-    <link rel="stylesheet"
-          type="text/css"
-          th:href="@{/resources/style.css}" />
-</head>
+    <title>Harrie &amp; Marie</title>
+
+    <!-- Determine Characterset as UTF8 -->
+    <meta charset="UTF-8" />
+
+    <!--Will control the visible area for the user. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <!-- Google fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Old+Standard+TT:400,400italic' rel="stylesheet" type="text/css" />
+
+    <!-- font awesome -->
+    <link rel="stylesheet" type="text/css" th:href="'//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'" />
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/bootstrap/css/bootstrap.min.css}" />
+
+    <!-- animate.css -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/animate.css}" />
+
+    <!-- Owl Carousel Assets -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/owl-carousel/owl.carousel.css}" />
+
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/style.css}" />
+
+    <!-- favicon -->
+    <link rel="shortcut icon" th:href="@{/resources/images/hmlogo.png}" type="image/x-icon" />
+    <link rel="icon" th:href="@{/resources/images/hmlogo.png}" type="image/x-icon" />
+
+</head> <!-- HEADER -->
+
 <body>
-<div id="header" th:include="page :: headerAuthenticated"></div>
+
+<div id="headerAuthenticated" sec:authorize="isAuthenticated()" th:include="template :: headerAuthenticated">AUTH</div>
+<div id="header" sec:authorize="isAnonymous()" th:include="template :: header">NON AUTH</div>
 
 <div id="content">
-    <h1 th:text="#{harrie.klant.modify}"></h1>
 
-    <form method="POST" th:object="${klantRegisterForm}" enctype="multipart/form-data">
-        <div class="errors" th:if="${#fields.hasErrors('*')}">
-            <ul>
-                <li th:each="err : ${#fields.errors('*')}"
-                    th:text="${err}">Input is incorrect</li>
-            </ul>
-        </div>
+    <div class="container">
 
-        <table class="center">
-            <tr>
-                <td><label th:class="${#fields.hasErrors('email')}? 'error'"
-                           th:text="#{harrie.klant.email}"></label>:</td>
-                <td><input type="text" th:field="*{email}"
-                           th:class="${#fields.hasErrors('email')}? 'error readonly' : 'readonly'"
-                           th:value="${klantRegisterForm.email}" th:readonly="true"/></td>
-            </tr>
-            <tr>
-                <td><label th:class="${#fields.hasErrors('voornaam')}? 'error'"
-                           th:text="#{harrie.klant.firstName}"></label>:</td>
-                <td><input type="text" th:field="*{voornaam}"
-                           th:class="${#fields.hasErrors('voornaam')}? 'error'"
-                           th:value="${klantRegisterForm.voornaam}"/></td>
-            </tr>
+        <div class="content inside-page client-modify">
+            <div class="breadcrumb"><a th:href="@{/}">Home</a> / <a th:href="@{/klant/profile}">My Profile</a> / <span th:text="'Modify'"></span> /
+                <span th:text="${klantRegisterForm.email}"></span></div>
 
-            <tr>
-                <td><label th:class="${#fields.hasErrors('tussenvoegsel')}? 'error'"
-                           th:text="#{harrie.klant.prefix}"></label>:</td>
-                <td><input type="text" th:field="*{tussenvoegsel}"
-                           th:class="${#fields.hasErrors('tussenvoegsel')}? 'error'"
-                           th:value="${klantRegisterForm.tussenvoegsel}"/></td>
-            </tr>
+            <div class="row">
+                <div class="col-sm-9">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <!-- product carousel -->
+                            <div id="ProductCarousel" class="carousel slide" data-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="item active"><img th:src="@{'data:image/jpeg;base64,'+${klant.clientProfilePicture}}" class="img-responsive" alt="profilePicture" /></div>
+                                </div>
+                                <!-- Controls -->
+                                <a class="left carousel-control" href="#ProductCarousel" role="button" data-slide="prev"><i class="fa fa-angle-left"></i></a>
+                                <a class="right carousel-control" href="#ProductCarousel" role="button" data-slide="next"><i class="fa fa-angle-right"></i></a>
+                            </div>
+                            <!-- product carousel -->
+                        </div>
 
-            <tr>
-                <td><label th:class="${#fields.hasErrors('achternaam')}? 'error'"
-                           th:text="#{harrie.klant.lastName}"></label>:</td>
-                <td><input type="text" th:field="*{achternaam}"
-                           th:class="${#fields.hasErrors('achternaam')}? 'error'"
-                           th:value="${klantRegisterForm.achternaam}"/></td>
-            </tr>
+                        <!-- product information -->
+                        <div class="col-sm-7 information">
+                            <h1 th:text="${klantRegisterForm.email}"></h1>
+                            <h2 th:text="${klantRegisterForm.voornaam} + ' ' + ${klantRegisterForm.achternaam}"></h2>
+
+                            <div class="clearfix spacer">
+                                <div class="col-sm-6">
+                                    <fieldset>
+                                        <div class="form-horizontal content-center">
+
+                                            <form method="POST" th:object="${klantRegisterForm}" enctype="multipart/form-data">
+
+                                                <div class="errors" th:if="${#fields.hasErrors('*')}">
+                                                    <ul>
+                                                        <li th:each="err : ${#fields.errors('*')}"
+                                                            th:text="${err}">Input is incorrect</li>
+                                                    </ul>
+                                                    <br />
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label th:class="'col-sm-4 control-label'"
+                                                           th:text="#{harrie.klant.emailAccount}"></label>
+
+                                                    <div class="col-sm-8">
+                                                        <input type="text" th:field="*{email}"
+                                                               th:class="${#fields.hasErrors('email')}? 'error form-control' : 'form-control'"
+                                                               th:readonly="true" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label th:class="'col-sm-4 control-label'"
+                                                           th:text="#{harrie.klant.firstName}"></label>
+
+                                                    <div class="col-sm-8">
+                                                        <input type="text" th:field="*{voornaam}"
+                                                               th:class="${#fields.hasErrors('voornaam')}? 'error form-control' : 'form-control'" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label th:class="'col-sm-4 control-label'"
+                                                           th:text="#{harrie.klant.prefix}"></label>
+
+                                                    <div class="col-sm-8">
+                                                        <input type="text" th:field="*{tussenvoegsel}"
+                                                               th:class="${#fields.hasErrors('tussenvoegsel')}? 'error form-control' : 'form-control'" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label th:class="'col-sm-4 control-label'"
+                                                           th:text="#{harrie.klant.lastName}"></label>
+
+                                                    <div class="col-sm-8">
+                                                        <input type="text" th:field="*{achternaam}"
+                                                               th:class="${#fields.hasErrors('achternaam')}? 'error form-control' : 'form-control'" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label th:class="'col-sm-4 control-label'"
+                                                           th:text="#{harrie.klant.password}"></label>
+
+                                                    <div class="col-sm-8">
+                                                        <input type="password" th:field="*{password}"
+                                                               th:class="${#fields.hasErrors('password')}? 'error form-control' : 'form-control'" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label th:text="#{harrie.klant.profilePicture}" class="col-sm-4 control-label"></label>
+
+                                                    <div class="col-sm-8">
+                                                        <input type="file" class="btn btn-small" name="profilePicture" accept="image/jpeg,image/png,image/gif" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-8 col-sm-offset-4">
+                                                    <input type="hidden" th:name="fromProfileView" th:value="1"/>
+                                                    <input type="submit" th:value="#{harrie.klant.modify}" class="btn btn-primary" />
+                                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                                </div>
+                                            </form>
+
+                                        </div>
+
+                                    </fieldset>
+
+                                </div> <!-- end col-sm-6 -->
+
+                            </div> <!-- end clearfix spacer -->
+
+                        </div>
+
+                        <!-- client modify information -->
+
+                    </div> <!-- row -->
+                </div> <!-- col-sm-9 -->
+            </div> <!-- row -->
 
 
-            <tr>
-                <td><label th:class="${#fields.hasErrors('password')}? 'error'"
-                           th:text="#{harrie.klant.password}"></label>:</td>
-                <td><input th:type="password" th:field="*{password}"
-                           th:class="${#fields.hasErrors('password')}? 'error'"
-                           th:value="${klantRegisterForm.password}"/></td>
-            </tr>
+        </div> <!-- INSIDE CLIENT -->
+    </div> <!-- CONTAINER -->
+</div> <!-- CONTENT -->
 
-            <tr>
-                <td><label th:text="#{harrie.klant.profilePicture}"></label>:</td>
-                <span><img class="profilePicture" th:src="@{'data:image/jpeg;base64,'+${klant.clientProfilePicture}}" /></span>
-                <td><input type="file" name="profilePicture" accept="image/jpeg,image/png,image/gif" /></td>
-            </tr>
+<script th:src="@{/resources/assets/script.js}"></script>
+<script th:src="@{/resources/assets/respond.js}"></script>
+<script th:src="@{/resources/assets/owl-carousel/owl.carousel.min.js}"></script>
+<script th:src="@{/resources/assets/jquery.js}"></script>
+<script th:src="@{/resources/assets/bootstrap/js/bootstrap.js}"></script>
 
-            <!--TODO: Profilepicture veranderen-->
-        </table>
-
-        <input type="submit" th:value="#{harrie.klant.modify}" />
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-    </form>
-</div>
-
-<div id="footer" th:include="page :: copy"></div>
+<div id="footer" th:include="template :: footer"></div>
 
 </body>
 </html>

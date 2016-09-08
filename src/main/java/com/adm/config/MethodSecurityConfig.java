@@ -7,7 +7,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
  *
  */
 
-@EnableGlobalMethodSecurity
-
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class MethodSecurityConfig {
 }

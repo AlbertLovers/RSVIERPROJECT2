@@ -34,11 +34,12 @@ import com.adm.domain.Betaling;
 import com.adm.domain.Factuur;
 import com.adm.domain.Klant;
 import com.adm.domain.Prijs;
+import com.adm.domain.ShoppingCart;
 
 @Controller
 @Component
 @Transactional
-@SessionAttributes({ "klant", "winkelwagen", "nieuweBestelling"})
+@SessionAttributes({ "klant", "shoppingCart", "nieuweBestelling"})
 public class BestellingController {
 
 	private BestellingDAO bestellingDAO;
@@ -86,29 +87,33 @@ public class BestellingController {
 	 *
 	 */
 	@RequestMapping(value = "/bestelling/select/{bestelId}", method = RequestMethod.GET)
-	public String listBestelling(@PathVariable("bestelId") long bestelId, Model model) {
-		List<BestelArtikel> bestelArtikelen = bestellingDAO.findBestellingArtikelen(bestelId);
+	public String listBestelling(@PathVariable("bestelId") long bestelId, Model model, Klant klant) {
+
 		Bestelling bestelling = bestellingDAO.findById(bestelId);
+		if(klant.getId() != bestelling.getKlant().getId()){
+			return "home";
+		}
+		List<BestelArtikel> bestelArtikelen = bestellingDAO.findBestellingArtikelen(bestelId);
+
+
 
 		BigDecimal totaal = totaalPrijsBestelling(bestelArtikelen.iterator());
 
+
+		Factuur factuur = bestelling.getFactuurSet().iterator().next();
+		Betaling betaling = factuur.getBetalingSet().iterator().next();
+
 		model.addAttribute("bestelArtikelen", bestelArtikelen);
-		model.addAttribute("factuur", bestelling.getFactuurSet().iterator().next());
+		model.addAttribute("factuur", factuur);
+		model.addAttribute("betalingswijze", betaling.getBetaalwijze().getBetaalWijze());
 		model.addAttribute("totaalPrijsExBtw", totaal);
 		model.addAttribute("totaalPrijsIncBtw", totaal.multiply(new BigDecimal("1.21")));
 
 		return "bestelling/factuur";
 	}
 
-
-
-
 	@RequestMapping(value = "/bestelling/bevestigen", method = RequestMethod.GET)
-	public String kiesBetaalmethode(Model model, HttpSession session) {
-
-		@SuppressWarnings("unchecked")
-		HashSet<BestelArtikel> winkelwagen = (HashSet<BestelArtikel>)session.getAttribute("winkelwagen");
-		Klant klant = (Klant)session.getAttribute("klant");
+	public String kiesBetaalmethode(Model model, HttpSession session, ShoppingCart winkelwagen, Klant klant) {
 
 		Bestelling bestelling = new Bestelling();
 		bestelling.setBestelNummer(Calendar.getInstance().get(Calendar.YEAR) + "-" + bestellingDAO.getCount());
@@ -117,50 +122,57 @@ public class BestellingController {
 		bestelling.setFactuurSet(new LinkedHashSet<Factuur>());
 
 		ArrayList<BestelArtikel> list = new ArrayList<BestelArtikel>();
-		list.addAll(winkelwagen);
+		list.addAll(winkelwagen.getWinkelwagen());
 
 
-		Betaalwijze betaalWijze = new Betaalwijze();
+		Betaling betaling = new Betaling();
+		betaling.setBetaalwijze(new Betaalwijze());
 
 		model.addAttribute("nieuweBestelling", bestelling);
 		model.addAttribute("artikelLijst", list);
-		model.addAttribute("betaalWijze", betaalWijze);
-		model.addAttribute("totaalPrijs", totaalPrijsBestelling(winkelwagen.iterator()));
+		model.addAttribute("betaling", betaling);
+		model.addAttribute("totaalPrijs", totaalPrijsBestelling(winkelwagen.getWinkelwagen().iterator()));
 
 		return "bestelling/betaling/betaling";
 	}
 
 	/* Bestelling naar database schrijven */
 	@RequestMapping(value = "/bestelling/bevestigen", method = RequestMethod.POST)
-	public String bestellingGeplaatst(Model model, Betaalwijze betaalWijze, HttpSession session) {
+	public String bestellingGeplaatst(Model model, Betaling betaling, HttpSession session, ShoppingCart winkelwagen,
+			Klant klant) {
 
 		Bestelling nieuweBestelling = (Bestelling)session.getAttribute("nieuweBestelling");
 
 		nieuweBestelling = bestellingDAO.makePersistent(nieuweBestelling);
 
-		@SuppressWarnings("unchecked")
-		HashSet<BestelArtikel> winkelwagen = (HashSet<BestelArtikel>) session.getAttribute("winkelwagen");
 
-		Iterator<BestelArtikel> it = winkelwagen.iterator();
+
+		nieuweBestelling.setBestelArtikelSet(winkelwagen.getWinkelwagen());
+
+		Iterator<BestelArtikel> it = winkelwagen.getWinkelwagen().iterator();
 
 		while(it.hasNext()){
 			it.next().setBestelling(nieuweBestelling);
 		}
 
-		nieuweBestelling.setBestelArtikelSet(winkelwagen);
+		nieuweBestelling.setBestelArtikelSet(winkelwagen.getWinkelwagen());
 
 		Factuur fact = maakFactuur(nieuweBestelling);
-		Betaling bet = new Betaling();
 
-		bet.setBetaalDatum(new java.sql.Date(System.currentTimeMillis()));
-		bet.setBetaalwijze(betaalWijze);
-		bet.setFactuur(fact);
-		bet.setKlant(nieuweBestelling.getKlant());
 
-		fact.voegBetalingToe(bet);
+		System.out.println("Value: " + betaling.getBetaalwijze().getValue());
 
-		nieuweBestelling.getFactuurSet().add(maakFactuur(nieuweBestelling));
+		betaling.setBetaalDatum(new java.sql.Date(System.currentTimeMillis()));
+		betaling.getBetaalwijze().setBetaalWijzeType();
+		betaling.setFactuur(fact);
+		betaling.setKlant(nieuweBestelling.getKlant());
 
+		fact.voegBetalingToe(betaling);
+
+		nieuweBestelling.getFactuurSet().add(fact);
+
+		// Clear shopping cart
+		winkelwagen.setWinkelwagen(new HashSet<BestelArtikel>());
 		return "bestelling/betaling/betaald";
 	}
 

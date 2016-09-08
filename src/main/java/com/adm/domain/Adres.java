@@ -15,10 +15,15 @@ public class Adres implements Serializable {
 
 	//Datafield
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3459574420668481569L;
+
 	@Id
 	@SequenceGenerator(name = "adresId", sequenceName = "zadres_sequence", allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "adresId")
-	private Long id;
+	private long id;
 
 	@Column(nullable = false)
 	private String straatnaam;
@@ -102,7 +107,7 @@ public class Adres implements Serializable {
 	public String getWoonplaats() {
 		return woonplaats;
 	}
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 	public String getDatumAanmaak() {
@@ -142,7 +147,7 @@ public class Adres implements Serializable {
 	public void setWoonplaats(String woonplaats) {
 		this.woonplaats = woonplaats;
 	}
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public void setDatumAanmaak(String datumAanmaak) {

@@ -22,7 +22,7 @@ public class BestelArtikel implements Serializable{
 	@Id
 	@SequenceGenerator(name = "bestArtid", sequenceName = "zBestel_artikel_sequence", allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "bestArtid")
-	private Long id;
+	private long id;
 
 	@ManyToOne
 	@JoinColumn(name = "artikelId", nullable = false)
@@ -53,7 +53,7 @@ public class BestelArtikel implements Serializable{
 		this.aantal = aantal;
 	}
 	
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
@@ -77,7 +77,7 @@ public class BestelArtikel implements Serializable{
 		this.prijs = prijs;
 	}
 
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

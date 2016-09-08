@@ -14,6 +14,11 @@ public class BetalingDAO extends GenericDAOImpl<Betaling, Long>{
 	 * Methodes kunnen toegevoegd of overschreven worden voor verdere implementatie.
 	 */
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2622959985715762705L;
+
 	// Constructor geeft automatisch de entityClass (Betaling.class) door aan GenericDAOImpl
 	protected BetalingDAO() {
 		super(Betaling.class);

@@ -2,7 +2,6 @@ package com.adm.web.forms;
 
 import java.math.BigDecimal;
 
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -25,17 +24,21 @@ public class ArtikelRegisterForm {
 	@Min(value = 1, message = "{productDeliveryTime.min}")
 	private Integer artikelLevertijd;
 	
+	@NotNull
+	private String artikelType;
+
 	private boolean artikelOpVoorraad;
 	
 	private MultipartFile artikelAfbeelding;
 	
 	public ArtikelRegisterForm() {
 	}
-	public ArtikelRegisterForm(String naam, BigDecimal prijs, Integer levertijd, boolean opVoorraad) {
+	public ArtikelRegisterForm(String naam, BigDecimal prijs, String artikelType, Integer levertijd, boolean opVoorraad) {
 		this.artikelNaam = naam;
 		this.artikelPrijs = prijs;
 		this.artikelLevertijd = levertijd;
 		this.artikelOpVoorraad = opVoorraad;
+		this.artikelType = artikelType;
 	}
 	
 	//Getters and Setters
@@ -60,6 +63,12 @@ public class ArtikelRegisterForm {
 		return artikelAfbeelding;
 	}
 
+	public String getArtikelType() {
+		return artikelType;
+	}
+	public void setArtikelType(String artikelType) {
+		this.artikelType = artikelType;
+	}
 	public void setArtikelNaam(String artikelNaam) {
 		this.artikelNaam = artikelNaam;
 	}
@@ -82,6 +91,6 @@ public class ArtikelRegisterForm {
 	
 	// TODO extra methode
 	public Artikel toArtikel() {
-		return new Artikel("BrianGriffin", new BigDecimal(10000), 3, true);
+		return new Artikel("BrianGriffin", "1", new BigDecimal(10000), 3, true);
 	}
 }

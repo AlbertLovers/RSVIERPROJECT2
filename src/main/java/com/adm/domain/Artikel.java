@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -14,8 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -28,10 +25,15 @@ import javax.persistence.UniqueConstraint;
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "artikelNaam"))
 public class Artikel implements Comparable<Artikel>, Serializable{
 
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = -4459665473211168178L;
+
 	@Id
 	@SequenceGenerator(name = "artikelId", sequenceName = "zArtikel_sequence", allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "artikelId")
-	private Long id; // hibernate returned nooit null wanneer het een primitiev type is
+	private long artikelId = 0; // hibernate returned nooit null wanneer het een primitiev type is
 
 	@Column(nullable = false)
 	private String artikelNaam;
@@ -40,9 +42,6 @@ public class Artikel implements Comparable<Artikel>, Serializable{
 	private BigDecimal artikelPrijs;
 
 	@OneToMany(mappedBy = "artikel", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-//	@JoinTable(name = "prijsArtikel",
-//	joinColumns = @JoinColumn(name = "artikelId", nullable = false),
-//	inverseJoinColumns = @JoinColumn(name = "prijsId", nullable = false))
 	private List<Prijs> prijzen = new ArrayList<>();
 	
 	@Temporal(TemporalType.TIMESTAMP)
@@ -58,7 +57,10 @@ public class Artikel implements Comparable<Artikel>, Serializable{
 	@OneToMany(mappedBy = "artikel")
 	@Column(nullable = false)
 	protected Set<BestelArtikel> bestelArtikel;
-	
+
+	@Column
+	private String artikelType;
+
 	@Transient
 	private String plaatje;
 
@@ -67,8 +69,9 @@ public class Artikel implements Comparable<Artikel>, Serializable{
 		this.datumAanmaak = new Date(System.currentTimeMillis());
 	}
 
-	public Artikel(String artikelNaam, BigDecimal artikelPrijs, int verwachteLevertijd, boolean inAssortiment) {
+	public Artikel(String artikelNaam, String artikelType, BigDecimal artikelPrijs, int verwachteLevertijd, boolean inAssortiment) {
 		this.artikelNaam = artikelNaam;
+		this.artikelType = artikelType;
 		this.artikelPrijs = artikelPrijs;
 		this.datumAanmaak = new Date(System.currentTimeMillis());
 		this.verwachteLevertijd = verwachteLevertijd;
@@ -76,8 +79,8 @@ public class Artikel implements Comparable<Artikel>, Serializable{
 	}
 
 	//Getters and Setters
-	public Long getId() {
-		return id;
+	public long getArtikelId() {
+		return artikelId;
 	}
 
 	public String getArtikelNaam() {
@@ -112,6 +115,14 @@ public class Artikel implements Comparable<Artikel>, Serializable{
 		return plaatje;
 	}
 
+	public String getArtikelType() {
+		return artikelType;
+	}
+
+	public void setArtikelType(String artikelType) {
+		this.artikelType = artikelType;
+	}
+
 	public void setPlaatje(String plaatje) {
 		this.plaatje = plaatje;
 	}
@@ -120,8 +131,8 @@ public class Artikel implements Comparable<Artikel>, Serializable{
 		this.bestelArtikel = bestelArtikel;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setArtikelId(long artikelId) {
+		this.artikelId = artikelId;
 	}
 
 	public void setArtikelNaam(String artikelNaam) {
@@ -156,7 +167,7 @@ public class Artikel implements Comparable<Artikel>, Serializable{
 
 	@Override
 	public boolean equals(Object o) {
-		return id == ((Artikel)o).getId();
+		return artikelId == ((Artikel)o).getArtikelId();
 	}
 
 	@Override
@@ -167,9 +178,9 @@ public class Artikel implements Comparable<Artikel>, Serializable{
 	}
 
 	public int compareTo(Artikel o) {
-		if (this.id == o.getId())
+		if (this.artikelId == o.getArtikelId())
 			return 0;
-		else if (this.id > o.getId())
+		else if (this.artikelId > o.getArtikelId())
 			return 1;
 		else
 			return -1;

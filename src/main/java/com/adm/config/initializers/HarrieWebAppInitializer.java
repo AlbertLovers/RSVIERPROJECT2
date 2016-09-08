@@ -16,8 +16,8 @@ import javax.servlet.ServletRegistration;
  */
 public class HarrieWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-//    private String uploadFolder = "c:/harrie/uploads"; // Windows
-    private String uploadFolder = "/tmp/harrie/uploads"; // Unix-Based
+    private String uploadFolder = "c:/harrie/uploads/"; // Windows
+//    private String uploadFolder = "/tmp/harrie/uploads"; // Unix-Based
 
 
     @Override

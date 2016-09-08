@@ -14,6 +14,11 @@ public class BetaalwijzeDAO extends GenericDAOImpl<Betaalwijze, Long>{
 	 * Methodes kunnen toegevoegd of overschreven worden voor verdere implementatie.
 	 */
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3732709754533473393L;
+
 	// Constructor geeft automatisch de entityClass (Betaalwijze.class) door aan GenericDAOImpl
 	protected BetaalwijzeDAO() {
 		super(Betaalwijze.class);

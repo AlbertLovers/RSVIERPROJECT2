@@ -14,6 +14,11 @@ public class AdresTypeDAO extends GenericDAOImpl<AdresType, Long>{
 	 * Methodes kunnen toegevoegd of overschreven worden voor verdere implementatie.
 	 */
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4129604068893418239L;
+
 	// Constructor geeft automatisch de entityClass (AdresType.class) door aan GenericDAOImpl
 	protected AdresTypeDAO() {
 		super(AdresType.class);

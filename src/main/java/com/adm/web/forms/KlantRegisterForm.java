@@ -96,7 +96,7 @@ public class KlantRegisterForm {
 
     // Extra methods
     public Klant toKlant() {
-        return new Klant(null, voornaam, achternaam, tussenvoegsel, email, password,
+        return new Klant(voornaam, achternaam, tussenvoegsel, email, password,
                         (new Date()).toString(), "", "1", null, null);
     }
 }

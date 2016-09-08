@@ -1,0 +1,102 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+
+
+<head>
+    <title>Harrie &amp; Marie</title>
+
+    <!-- Determine Characterset as UTF8 -->
+    <meta charset="UTF-8" />
+
+    <!--Will control the visible area for the user. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <!-- Google fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Old+Standard+TT:400,400italic' rel="stylesheet" type="text/css" />
+
+    <!-- font awesome -->
+    <link rel="stylesheet" type="text/css" th:href="'//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'" />
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/bootstrap/css/bootstrap.min.css}" />
+
+    <!-- animate.css -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/animate.css}" />
+
+    <!-- Owl Carousel Assets -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/owl-carousel/owl.carousel.css}" />
+
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/style.css}" />
+
+    <!-- favicon -->
+    <link rel="shortcut icon" th:href="@{/resources/images/hmlogo.png}" type="image/x-icon" />
+    <link rel="icon" th:href="@{/resources/images/hmlogo.png}" type="image/x-icon" />
+
+</head> <!-- HEADER -->
+
+<div id="headerAuthenticated" sec:authorize="isAuthenticated()" th:include="template :: headerAuthenticated">AUTH</div>
+<div id="header" sec:authorize="isAnonymous()" th:include="template :: header">NON AUTH</div>
+
+<div id="content">
+
+    <div class="container">
+
+        <!-- form -->
+        <div class="content inside-page contact">
+            <h2 class="title">Contact</h2>
+            <div class="breadcrumb"><a th:href="@{/}">Home</a> / Contact</div>
+
+            <div class="row">
+
+                <div class="col-sm-12">
+                    <div class="map">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2449.2332870167243!2d4.374734915839326!3d52.13007777280453!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c5b83f0d2ca041%3A0xe53fd0af46d668b4!2sKonijnenlaan+2%2C+2243+ER+Wassenaar!5e0!3m2!1snl!2snl!4v1472290079539" width="100%" height="300" frameborder="0" ></iframe> </div>
+
+                    <div class="location col-sm-6 col-sm-offset-3">
+                        <h3>Shop</h3>
+                        <p> Konijnenlaan 2 <br />
+                            2243 ES Wassenaar <br />
+                            The Netherlands</p>
+
+                        <h3>Write to us</h3>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="name" placeholder="Name" />
+                            </div>
+                            <div class="form-group">
+                                <input type="email" class="form-control" id="email" placeholder="Enter email" />
+                            </div>
+                            <div class="form-group">
+                                <input type="phone" class="form-control" id="phone" placeholder="Phone" />
+                            </div>
+                            <div class="form-group">
+                                <textarea type="email" class="form-control"  placeholder="Message" rows="4"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Send</button>
+                        </form>
+                    </div>
+                </div>
+            </div> <!-- ROW -->
+        </div> <!-- INSIDE CONTENT -->
+        <!-- form -->
+
+    </div> <!-- Container -->
+
+</div> <!-- CONTENT -->
+
+
+<script th:src="@{/resources/assets/script.js}"></script>
+<script th:src="@{/resources/assets/respond.js}"></script>
+<script th:src="@{/resources/assets/owl-carousel/owl.carousel.min.js}"></script>
+<script th:src="@{/resources/assets/jquery.js}"></script>
+<script th:src="@{/resources/assets/bootstrap/js/bootstrap.js}"></script>
+
+<div id="footer" th:include="template :: footer"></div>
+
+</body>
+</html>

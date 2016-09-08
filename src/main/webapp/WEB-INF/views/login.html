@@ -1,33 +1,91 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+
 <head>
-    <title>Harrie's Login-page</title>
-    <link rel="stylesheet"
-          type="text/css"
-          th:href="@{/resources/style.css}" />
+    <title>Harrie &amp; Marie</title>
+
+    <!-- Determine Characterset as UTF8 -->
+    <meta charset="UTF-8" />
+
+    <!--Will control the visible area for the user. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <!-- Google fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Old+Standard+TT:400,400italic' rel='stylesheet' type='text/css' />
+
+    <!-- font awesome -->
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/bootstrap/css/bootstrap.min.css}" />
+
+    <!-- animate.css -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/animate.css}" />
+
+    <!-- Owl Carousel Assets -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/owl-carousel/owl.carousel.css}" />
+
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/style.css}" />
+
+    <!-- favicon -->
+    <link rel="shortcut icon" th:href="@{/resources/images/hmlogo.png}" type="image/x-icon" />
+    <link rel="icon" th:href="@{/resources/images/hmlogo.png}" type="image/x-icon" />
+
 </head>
+
 <body onload='document.f.username.focus();'>
-<div id="header" th:include="page :: header"></div>
+<div id="header" th:include="template :: header"></div>
 
-<div id="content">
+<div class="container">
+    <div class="content inside-page login">
 
-    <!--<a th:href="@{/klant/register}">Register</a>-->
+        <h2 class="title">Login/Register</h2>
+        <div class="breadcrumb"><a th:href="@{/}">Home</a> / Checkout</div>
 
+        <div class="row">
+            <div class="col-sm-6">
 
-    <form name='f' th:action='@{/login}' method='POST'>
-        <table class="center">
-            <tr><td>User:</td><td>
-                <input type='text' name='username' value='' /></td></tr>
-            <tr><td>Password:</td>
-                <td><input type='password' name='password'/></td></tr>
-            <tr><td colspan='2'>
-                <input id="remember_me" name="remember-me" type="checkbox"/>
-                <label for="remember_me" class="inline">Remember me</label></td></tr>
-            <tr><td colspan='2'>
-                <input name="submit" type="submit" value="Login" align="center"/></td></tr>
-        </table>
-    </form>
+                <form name='f' th:action='@{/login}' method='POST'>
+                    <h3>Sign In</h3>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <input type="text" class="form-control" name='username' id="exampleInputEmail1" placeholder="Enter email" />
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Password</label>
+                        <input type="password" class="form-control" name='password' id="exampleInputPassword1" placeholder="Password" />
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input name="remember-me" type="checkbox" /> Remember password
+                        </label>
+                    </div>
+                    <div class="forgot-password"><a href="#">Forgot Password</a></div>
+                    <button type="submit" name="submit" value="Login" class="btn btn-primary">Submit</button>
+                </form>
+
+            </div>
+            <div class="col-sm-6">
+                <h3>Create an Account</h3>
+                <p>I would like to create a new account.</p>
+                <a th:href="@{/klant/register}" class="btn btn-primary">Create an Account</a>
+
+            </div>
+        </div>
+
+    </div>
+
 </div>
-<div id="footer" th:include="page :: copy"></div>
+
+<div id="footer" th:include="template :: footer"></div>
+
+<script th:src="@{/resources/assets/script.js}"></script>
+<script th:src="@{/resources/assets/respond.js}"></script>
+<script th:src="@{/resources/assets/owl-carousel/owl.carousel.min.js}"></script>
+<script th:src="@{/resources/assets/jquery.js}"></script>
+<script th:src="@{/resources/assets/bootstrap/js/bootstrap.js}"></script>
 </body>
 </html>

@@ -14,6 +14,11 @@ public class PrijsDAO extends GenericDAOImpl<Prijs, Long>	 {
 	 * Methodes kunnen toegevoegd of overschreven worden voor verdere implementatie.
 	 */
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4940588918388930738L;
+
 	// Constructor geeft automatisch de entityClass (Artikel.class) door aan GenericDAOImpl
 	protected PrijsDAO() {
 		super(Prijs.class);

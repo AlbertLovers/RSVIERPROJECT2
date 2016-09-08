@@ -1,51 +1,83 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+
 <head>
-    <title>Harrie and Marie-Claire (Exotic Diners and Clothing Inc.</title>
-    <link rel="stylesheet"
-          type="text/css"
-          th:href="@{/resources/style.css}" />
+    <title>Harrie &amp; Marie</title>
+
+    <!-- Determine Characterset as UTF8 -->
+    <meta charset="UTF-8" />
+
+    <!--Will control the visible area for the user. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <!-- Google fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Old+Standard+TT:400,400italic' rel="stylesheet" type="text/css" />
+
+    <!-- font awesome -->
+    <link rel="stylesheet" type="text/css" th:href="'//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'" />
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/bootstrap/css/bootstrap.min.css}" />
+
+    <!-- animate.css -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/animate.css}" />
+
+    <!-- Owl Carousel Assets -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/owl-carousel/owl.carousel.css}" />
+
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/assets/style.css}" />
+
+    <!-- favicon -->
+    <link rel="shortcut icon" th:href="@{/resources/images/hmlogo.png}" type="image/x-icon" />
+    <link rel="icon" th:href="@{/resources/images/hmlogo.png}" type="image/x-icon" />
+
 </head>
 
-<body>
-<div id="header" th:include="page :: headerAuthenticated"></div>
+<body id="home">
+
+<div id="headerAuthenticated" sec:authorize="isAuthenticated()" th:include="template :: headerAuthenticated">AUTH</div>
+<div id="header" sec:authorize="isAnonymous()" th:include="template :: header">NON AUTH</div>
 
 <div id="content">
 
-    <p th:if="${klant.achternaam} == null" th:text="'Hey you anonoymous client!'"></p>
-    <p th:if="${klant.achternaam} != null" th:text="'Hey You! Mr or Mrs. ' + ${klant.achternaam}"></p>
-    <br/>
-    <p>
-    Door veel te lezen vergroot je je vocabulaire en ontwikkel je gevoel voor stijl en genre-kenmerken. Dit gaat
-    gewoonlijk vanzelf, maar je kunt het ook doelbewust en gericht doen. Als je voorafgaand aan een schrijfopdracht
-    vergelijkbare, bestaande teksten bekijkt, kun je je al lezend een beeld vormen van de eisen en verwachtingen
-    waaraan je eigen werk moet voldoen. Het verschaft vaak helderheid over aspecten van tekstsoorten die in
-    opdrachtinstructies niet onder woorden (kunnen) worden gebracht.
-    </p>
-    <br/>
-    <p>
-        De Supermarine Spitfire was een Brits jachtvliegtuig. Het toestel werd in 1938 in productie genomen door
-        Supermarine Division, Vickers Armstrong Ltd.. Het toestel werd gedurende de gehele Tweede Wereldoorlog ingezet
-        door de geallieerden, voornamelijk door de RAF. Er werden in totaal 20.340 stuks gebouwd.Daarnaast bestond
-        ook nog de variant Seafire, waarvan er 2.594 werden gebouwd.
-        <br/>
-        De Spitfire valt op door zijn stroomlijn en ellipsvormige vleugels. De versie Mk. XIV haalde een maximumsnelheid
-        van 721 km/h op een hoogte van 8000 meter. Het vliegtuig is vooral bekend door de beslissende rol die het speelde
-        tijdens de Slag om Engeland.
-        <br />
-        De meeste deskundigen zijn van mening dat de vliegeigenschappen van de Spitfire en zijn Duitse tegenstander,
-        de Messerschmitt Bf 109 elkaar maar weinig ontliepen. De voordelen van de Spitfire waren de bijzondere vleugels,
-        die een betere manoeuvreerbaarheid gaven; een groter motorvermogen en een beter zicht vanuit de cockpit;
-        een kwestie van leven of dood voor een jachtpiloot. De bolvormige kap bood de mogelijkheid om zowel naar
-        beneden, naar boven als in het rond te kijken. Een aanvankelijk nadeel van de Spitfires was dat de erin toegepaste
-        Rolls-Royce Merlin-motor ter verkrijging van een maximaal vermogen met carburateurs was uitgerust, terwijl de
-        Messerschmitt over een injectiemotor beschikte. Door de carburateurs kon de Spitfire geen steile duiken uitvoeren,
-        omdat bij negatieve zwaartekrachten de motor te weinig brandstof kreeg en daardoor kon uitvallen.
-    </p>
+    <!--<div sec:authorize="hasRole('USER')">-->
+        <!--This will only be displayed if authenticated user has role ROLE_USER.-->
+    <!--</div>-->
 
+
+    <!-- hero landing -->
+    <div class="hero-land clearfix">
+        <div class="landing marieclaire">
+            <img th:src="@{/resources/images/harrie.jpg}" class="img-responsive" alt="slide" />
+            <div class="caption  animated fadeInUp"><h1>Harrie's Exotic Food</h1><a th:href="@{/artikel/H}"><i class="fa fa-angle-right"></i></a></div>
+        </div>
+        <div class="landing harrie">
+            <img th:src="@{/resources/images/marieclaire.jpg}"  class="img-responsive" alt="slide" />
+            <div class="caption animated fadeInUp"><h1>Marie Claire's Fur</h1><a th:href="@{/artikel/M}"><i class="fa fa-angle-right"></i></a></div>
+        </div>
+    </div>
+    <!-- hero landing -->
+
+    <div class="container">
+        <div class="content inside-page home" >
+
+            <p th:if="${klant.achternaam} == null" th:text="'Hey you anonoymous client!'"></p>
+            <p th:if="${klant.achternaam} != null" th:text="'Hey You! Mr or Mrs. ' + ${klant.achternaam}"></p>
+        </div>
+    </div>
 </div>
 
-<div id="footer" th:include="page :: copy"></div>
+<div id="footer" th:include="template :: footer"></div>
+
+<script th:src="@{/resources/assets/script.js}"></script>
+<script th:src="@{/resources/assets/respond.js}"></script>
+<script th:src="@{/resources/assets/owl-carousel/owl.carousel.min.js}"></script>
+<script th:src="@{/resources/assets/jquery.js}"></script>
+<script th:src="@{/resources/assets/bootstrap/js/bootstrap.js}"></script>
 
 </body>
 </html>

@@ -22,6 +22,11 @@ public class BestellingDAO extends GenericDAOImpl<Bestelling, Long>{
 	 * Methodes kunnen toegevoegd of overschreven worden voor verdere implementatie.
 	 */
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7768397408796295517L;
+
 	// Constructor geeft automatisch de entityClass (Bestelling.class) door aan GenericDAOImpl
 	protected BestellingDAO() {
 		super(Bestelling.class);

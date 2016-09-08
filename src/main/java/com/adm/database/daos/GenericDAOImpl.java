@@ -24,6 +24,11 @@ public abstract class GenericDAOImpl<E, ID extends Serializable> implements Gene
 	 * context begrijpt. Anders kan setEntityManager() gebruikt worden.
 	 */
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2574464009767283339L;
+
 	@PersistenceContext
 	protected EntityManager entityManager;
 	
